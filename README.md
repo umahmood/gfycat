@@ -30,7 +30,8 @@ func main() {
 ```
 Output:
 ```
-
+similardeardowitcher
+nastyminibeastagonizing
 ```
 
 # Documentation
