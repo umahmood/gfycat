@@ -25,7 +25,7 @@ func main() {
         // handle error
     }
     fmt.Println(g.GenerateName())
-    fmt.Println(g.GenerateNameOrder(gfycat.AnimalFirst))
+    fmt.Println(g.GenerateNameOrder(gfycat.AnimalSecond))
 }
 ```
 Output:
