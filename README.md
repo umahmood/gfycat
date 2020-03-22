@@ -26,12 +26,16 @@ func main() {
     }
     fmt.Println(g.GenerateName())
     fmt.Println(g.GenerateNameOrder(gfycat.AnimalSecond))
+    fmt.Println(g.GenerateNameFmt("%s-%s-%s"))
+    fmt.Println(g.GenerateNameOrderFmt("%s_%s_%s", gfycat.AnimalFirst))
 }
 ```
 Output:
 ```
 similardeardowitcher
 nastyminibeastagonizing
+guilty-mixed-komododragon
+argentinehornedfrog_dutiful_bulky
 ```
 
 # Documentation

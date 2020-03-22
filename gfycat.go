@@ -2,6 +2,7 @@ package gfycat
 
 import (
 	"bufio"
+	"fmt"
 	"io/ioutil"
 	"math/rand"
 	"net/http"
@@ -93,8 +94,8 @@ func New() (*Gfycat, error) {
 	}, nil
 }
 
-// GenerateNameOrder generates gfycat name with a specific ordering
-func (g *Gfycat) GenerateNameOrder(order Order) string {
+// generateNameHelper method used by all GenerateName* methods
+func (g *Gfycat) generateNameHelper(order Order) (string, string, string) {
 	w1 := g.random.Intn(len(g.adjectives))
 	w2 := g.random.Intn(len(g.adjectives))
 	w3 := g.random.Intn(len(g.animals))
@@ -104,19 +105,53 @@ func (g *Gfycat) GenerateNameOrder(order Order) string {
 	c := g.animals[w3]
 	switch order {
 	case AnimalFirst:
-		return c + b + a
+		return c, b, a
 	case AnimalSecond:
-		return a + c + b
+		return a, c, b
 	case AnimalThird:
 		fallthrough
 	default:
-		return a + b + c
+		return a, b, c
 	}
+}
+
+// GenerateNameFmt generates gfycat name with user specific formatting i.e.
+// "%s_%s_%s" would produce a string in the format aaa_bbb_ccc. The format
+// string must contain three and only three '%s':
+//
+// - "%s-"       // invalid
+// - "%s-%s"     // invalid
+// - "%s-%s-%s"  // valid
+// - "%s-%s-%s"  // invalid
+//
+func (g *Gfycat) GenerateNameFmt(format string) string {
+	w1, w2, w3 := g.generateNameHelper(AnimalThird)
+	return fmt.Sprintf(format, w1, w2, w3)
+}
+
+// GenerateNameOrderFmt generates gfycat name with user specific formatting and
+// order. The format string must contain three and only three '%s':
+//
+// - "%s-"       // invalid
+// - "%s-%s"     // invalid
+// - "%s-%s-%s"  // valid
+// - "%s-%s-%s"  // invalid
+//
+func (g *Gfycat) GenerateNameOrderFmt(format string, order Order) string {
+	w1, w2, w3 := g.generateNameHelper(order)
+	return fmt.Sprintf(format, w1, w2, w3)
+}
+
+// GenerateNameOrder generates gfycat name with a specific ordering
+func (g *Gfycat) GenerateNameOrder(order Order) string {
+	w1, w2, w3 := g.generateNameHelper(order)
+	return w1 + w2 + w3
 }
 
 // GenerateName generates gfycat name
 func (g *Gfycat) GenerateName() string {
-	return g.GenerateNameOrder(AnimalThird)
+	w1, w2, w3 := g.generateNameHelper(AnimalThird)
+	return w1 + w2 + w3
 }
 
 // loadfile retrieves the requested file
